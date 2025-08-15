@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ mock_test.title }} | RRB Test Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-50 via-gray-100 to-white text-gray-800">
+
+  <div class="container mx-auto px-6 py-16">
+    <div class="bg-white shadow-2xl rounded-2xl p-10 text-center max-w-2xl mx-auto border-t-8 border-blue-800">
+
+      <!-- Train Themed Header -->
+      <div class="flex flex-col items-center mb-8">
+        <img src="{% static 'images/train.png' %}" alt="Train Icon" class="h-16 w-16 mb-4">
+        <h2 class="text-3xl font-bold text-blue-800">🚆 RRB Mock Test Completed!</h2>
+        <h3 class="text-xl font-semibold mt-2">{{ mock_test.title }}</h3>
+      </div>
+
+      <!-- Score Display -->
+      <p class="text-2xl font-bold text-gray-900 mt-6">
+        Your Score: <span class="text-blue-700">{{ score }}</span> / {{ total }}
+      </p>
+
+      <!-- Percentage -->
+      <p class="mt-4 text-lg">
+        Percentage:
+        {% with percent=score|floatformat:2|divisibleby:total %}
+        <span class="font-semibold {% if percent >= 50 %}text-green-600{% else %}text-red-600{% endif %}">
+          {{ score|floatformat:2 }} / {{ total }} ({{ score|mul:100|div:total }}%)
+        </span>
+        {% endwith %}
+      </p>
+
+      <!-- Feedback Message -->
+      {% if score|mul:100|div:total >= 50 %}
+        <p class="mt-4 text-green-700 font-medium">🎉 Great job! You're on the right track to success.</p>
+      {% else %}
+        <p class="mt-4 text-red-700 font-medium">🚂 Keep practicing! Success is just around the corner.</p>
+      {% endif %}
+
+      <!-- Action Buttons -->
+      <div class="mt-10 flex justify-center gap-4">
+        <a href="{% url 'rrb' %}"
+           class="bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950
+                  text-white px-6 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          🔙 Back to RRB Page
+        </a>
+        <a href="{% url 'rrb_mocktest' mock_test.id %}"
+           class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          🔄 Retake Test
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mock Test | AKSHARA INSTITUTE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <div class="text-2xl font-bold tracking-wide">Akshara Institute</div>
+      <ul class="flex space-x-8 text-lg">
+        <li><a href="/" class="hover:text-yellow-300 transition">Home</a></li>
+        <li><a href="{% url 'register' %}" class="hover:text-yellow-300 transition">Register</a></li>
+        <li><a href="{% url 'subscription' %}" class="hover:text-yellow-300 transition">Subscription</a></li>
+        <li><a href="{% url 'psc' %}" class="hover:text-yellow-300 transition">Mock Test</a></li>
+        <li><a href="{% url 'daily_quiz' %}" class="hover:text-yellow-300 transition">Daily Quiz</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-16">
+    <div class="container mx-auto text-center px-6">
+      <h1 class="text-4xl font-bold mb-4">Sharpen Your Skills with Mock Tests</h1>
+      <p class="text-lg max-w-2xl mx-auto mb-6">
+        Access curated practice exams designed to prepare you for Kerala PSC and other competitive tests.
+      </p>
+    </div>
+  </section>
+
+  <!-- Available Tests -->
+  <div class="container mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Available Mock Tests</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for item in progress_objects %}
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+          <h3 class="text-xl font-semibold mb-2">{{ item.test.title }}</h3>
+          <p class="text-gray-600 mb-4">{{ item.test.description|default:"30 Questions Mock Test" }}</p>
+
+          {% if item.completed %}
+            <p class="text-green-600 font-medium">✅ Completed</p>
+            <p class="mt-1">Score: {{ item.score }}/{{ item.test.questions.count }}</p>
+          {% else %}
+            <p class="text-yellow-600 font-medium">⏳ Not Attempted</p>
+          {% endif %}
+
+          {% if item.test.id == trial_test.id %}
+            <!-- Free Trial Test -->
+            <a href="{% url 'mocktest_detail' item.test.id %}"
+               class="bg-green-600 text-white px-4 py-2 rounded mt-4 inline-block">
+               {% if item.completed %}Retake Free Trial{% else %}Start Free Trial{% endif %}
+            </a>
+          {% elif has_premium %}
+            <!-- Premium User -->
+            <a href="{% url 'mocktest_detail' item.test.id %}"
+               class="bg-blue-600 text-white px-4 py-2 rounded mt-4 inline-block">
+               {% if item.completed %}Retake Test{% else %}Start Test{% endif %}
+            </a>
+          {% else %}
+            <!-- Locked for Non-Premium -->
+            <div class="bg-red-50 border border-red-300 text-center p-4 rounded mt-4">
+              <p class="text-red-600 font-semibold mb-2">🔒 Premium Required</p>
+              <a href="{% url 'subscription' %}"
+                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                Subscribe to Unlock
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-blue-700 text-white mt-12 py-6 text-center">
+    <p>&copy; 2025 Akshara Institute. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

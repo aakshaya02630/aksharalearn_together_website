@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Akshara Learn Together</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-white min-h-screen flex items-center justify-center">
+
+  <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 space-y-6">
+
+    <!-- Messages appear here -->
+    {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+          <div class="px-4 py-3 rounded-lg
+                      {% if message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% endif %}
+                      {% if message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% endif %}
+                      {% if message.tags == 'warning' %}bg-yellow-100 border border-yellow-400 text-yellow-700{% endif %}"
+               role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="text-center">
+      <img src="{% static 'images/logo.jpg' %}" alt="AKSHARA LEARN TOGETHER" class="h-16 mx-auto mb-4">
+      <h2 class="text-2xl font-bold text-gray-800">Login to Your Account</h2>
+      <p class="text-sm text-gray-500">Start your journey with Akshara Learn Together</p>
+    </div>
+
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" id="username" name="username" required
+               class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" id="password" name="password" required
+               class="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+        Login
+      </button>
+
+      <div class="flex justify-between text-sm mt-4">
+        <a href="{% url 'password_reset_request' %}" class="text-blue-600 hover:underline">Forgot password?</a>
+        <a href="{% url 'register' %}" class="text-blue-600 hover:underline">Create Account</a>
+     </div>
+
+    </form>
+  </div>
+
+</body>
+</html>

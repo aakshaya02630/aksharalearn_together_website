@@ -1,0 +1,46 @@
+{% if query %}
+  <div class="max-w-4xl mx-auto mt-10 bg-gray-50 p-6 rounded shadow">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Search Results for "{{ query }}"</h2>
+
+    {% if mocktests %}
+      <h3 class="font-bold mt-4">Mock Tests</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        {% for test in mocktests %}
+          <li>{{ test.title }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if pyqs %}
+      <h3 class="font-bold mt-4">PYQs</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        {% for pyq in pyqs %}
+          <li>{{ pyq.title }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if courses %}
+      <h3 class="font-bold mt-4">Courses</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        {% for course in courses %}
+          <li>{{ course.name }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if courses %}
+      <h3 class="font-bold mt-4">psc</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        {% for psc in psc %}
+          <li>{{ course.name }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+
+    {% if not mocktests and not pyqs and not courses %}
+      <p class="text-red-500 mt-2">No results found.</p>
+    {% endif %}
+  </div>
+{% endif %}

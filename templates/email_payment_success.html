@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 30px; }
+    .container { background: #ffffff; max-width: 600px; margin: auto; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .header { background: #22c55e; color: #fff; padding: 20px; border-radius: 10px 10px 0 0; text-align: center; }
+    .header h2 { margin: 0; font-size: 24px; }
+    .content { padding: 20px; }
+    .content p { font-size: 16px; color: #444; line-height: 1.6; }
+    .details { background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    .details p { margin: 8px 0; font-size: 15px; }
+    .btn { display: inline-block; background: #22c55e; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+    .footer { text-align: center; color: #666; font-size: 13px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>🎉 Payment Successful</h2>
+    </div>
+    <div class="content">
+      <p>Hi <b>{{ user.username }}</b>,</p>
+      <p>Thank you for your payment! Your <b>Premium Plan</b> is now active.</p>
+
+      <div class="details">
+        <p><b>Transaction ID:</b> {{ transaction_id }}</p>
+        <p><b>Amount Paid:</b> {{ amount }}</p>
+        <p><b>Plan Expiry:</b> {{ end_date|date:"F j, Y, g:i a" }}</p>
+      </div>
+
+      <p>You can now access all premium features and exclusive content.</p>
+
+      <p style="text-align:center;">
+        <a href="https://yourwebsite.com/dashboard" class="btn">Go to Dashboard</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>If you have any questions, contact us at <a href="mailto:support@yourwebsite.com">support@yourwebsite.com</a>.</p>
+    </div>
+  </div>
+</body>
+</html>

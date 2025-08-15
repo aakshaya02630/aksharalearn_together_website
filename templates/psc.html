@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PSC Coaching - Akshara Learn Together</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg p-6 hidden md:block">
+    <div class="flex items-center mb-8">
+      <img src="{% static 'images/logo.jpg' %}" alt="Akshara Logo" class="h-10 mr-3">
+      <h1 class="text-xl font-bold text-blue-700">Akshara Learn Together</h1>
+    </div>
+    <nav class="space-y-4">
+      <a href="{% url 'psc' %}?section=video" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-blue-100 {% if section == 'video' %}bg-blue-100{% endif %}">
+        <i data-feather="video"></i> <span>Video Classes</span>
+      </a>
+      <a href="{% url 'psc' %}?section=mocktest" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-blue-100 {% if section == 'mocktest' %}bg-blue-100{% endif %}">
+        <i data-feather="edit-3"></i> <span>Mock Tests</span>
+      </a>
+      <a href="{% url 'psc' %}?section=pyq" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-blue-100 {% if section == 'pyq' %}bg-blue-100{% endif %}">
+        <i data-feather="file-text"></i> <span>Previous Year Qns</span>
+      </a>
+      <a href="{% url 'psc' %}?section=current_affairs" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-blue-100 {% if section == 'current_affairs' %}bg-blue-100{% endif %}">
+        <i data-feather="book-open"></i> <span>Current Affairs</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6">
+
+    <!-- Hero Section -->
+    <div class="relative w-full h-52 md:h-64 rounded-2xl overflow-hidden shadow-lg mb-10">
+      <div class="absolute inset-0 bg-blue-900 bg-opacity-60 flex flex-col justify-center items-center text-white text-center px-6">
+        <h1 class="text-3xl md:text-4xl font-bold">PSC Coaching at Akshara</h1>
+        <p class="mt-3 text-lg">Prepare for Kerala PSC with Expert Guidance & Mock Tests</p>
+      </div>
+      <img src="{% static 'images/akshara2.jpeg' %}" class="w-full h-full object-cover">
+    </div>
+
+    <!-- Kerala PSC Notifications -->
+    <section id="notifications" class="mb-12">
+      <div class="bg-gradient-to-r from-blue-50 via-white to-blue-50 rounded-xl shadow-md p-8">
+        <h2 class="text-2xl font-bold mb-4 text-blue-800 flex items-center gap-2">
+          <i data-feather="bell"></i> Kerala PSC Notifications
+        </h2>
+        <p class="text-gray-700 leading-relaxed mb-6">
+          Stay updated with the latest <strong>Kerala Public Service Commission (PSC)</strong>
+          notifications including exam schedules, recruitment announcements, and syllabus updates.
+        </p>
+        <div class="text-center">
+          <a href="https://www.keralapsc.gov.in/latest-notifications" target="_blank"
+             class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-md transition">
+            🔗 View Latest Kerala PSC Notifications
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Content -->
+    {% if section == "video" %}
+      <!-- Video Classes -->
+      {% if needs_subscription %}
+        <div class="bg-red-50 border border-red-300 text-center p-6 rounded-lg shadow">
+          <h2 class="text-2xl font-bold text-red-600 mb-3">🔒 Access Restricted</h2>
+          <p class="text-gray-700 mb-4">You need a subscription to view PSC Video Classes.</p>
+          <a href="{% url 'subscription' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+            Subscribe Now
+          </a>
+        </div>
+      {% else %}
+        <h2 class="text-2xl font-bold mb-6 text-blue-800 flex items-center gap-2">
+          <i data-feather="video"></i> Video Classes
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {% for video in video_classes %}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:scale-105 transform transition">
+              <img src="{% static 'images/video-thumb.jpg' %}" alt="Thumbnail" class="h-40 w-full object-cover">
+              <div class="p-4">
+                <h3 class="font-semibold text-lg">{{ video.title }}</h3>
+                <p class="text-sm text-gray-600">{{ video.description|truncatewords:15 }}</p>
+                <a href="{{ video.video_link }}" target="_blank" class="mt-3 inline-block text-blue-600 font-medium hover:underline">▶ Watch Now</a>
+              </div>
+            </div>
+          {% empty %}
+            <p>COMING SOON</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    {% elif section == "mocktest" %}
+      <!-- Mock Tests -->
+      {% if needs_subscription %}
+        <div class="bg-red-50 border border-red-300 text-center p-6 rounded-lg shadow">
+          <h2 class="text-2xl font-bold text-red-600 mb-3">🔒 Access Restricted</h2>
+          <p class="text-gray-700 mb-4">You need a subscription to view PSC Mock Tests.</p>
+          <a href="{% url 'subscription' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+            Subscribe Now
+          </a>
+        </div>
+      {% else %}
+        <h2 class="text-2xl font-bold mb-6 text-blue-800 flex items-center gap-2">
+          <i data-feather="edit-3"></i> Mock Tests
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {% for test in mock_tests %}
+            <div class="bg-white rounded-xl shadow-md p-5 hover:scale-105 transform transition">
+              <h3 class="font-semibold text-lg mb-2">{{ test.title }}</h3>
+              <p class="text-sm text-gray-600">{{ test.description }}</p>
+              <a href="{% url 'psc_mocktest' test.id %}" class="text-blue-600 hover:underline">Start Test</a>
+            </div>
+          {% empty %}
+            <p>No mock tests available.</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    {% elif section == "pyq" %}
+      <!-- PYQs -->
+      <h2 class="text-2xl font-bold mb-6 text-blue-800 flex items-center gap-2">
+        <i data-feather="file-text"></i> Previous Year Questions
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for pyq in pyqs %}
+          <div class="bg-white rounded-xl shadow-md p-5">
+            <h3 class="font-semibold text-lg">{{ pyq.exam_name }} ({{ pyq.year }})</h3>
+            <a href="{{ pyq.pdf_file.url }}" target="_blank" class="text-purple-600 hover:underline">⬇ Download PDF</a>
+          </div>
+        {% empty %}
+          <p>No PYQs available.</p>
+        {% endfor %}
+      </div>
+
+    {% elif section == "current_affairs" %}
+      <!-- Current Affairs -->
+      {% if needs_subscription %}
+        <div class="bg-red-50 border border-red-300 text-center p-6 rounded-lg shadow">
+          <h2 class="text-2xl font-bold text-red-600 mb-3">🔒 Access Restricted</h2>
+          <p class="text-gray-700 mb-4">You need a subscription to view Current Affairs PDFs.</p>
+          <a href="{% url 'subscription' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+            Subscribe Now
+          </a>
+        </div>
+      {% else %}
+        <h2 class="text-2xl font-bold mb-6 text-blue-800 flex items-center gap-2">
+          <i data-feather="book-open"></i> Current Affairs
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for pdf in current_affairs %}
+            <div class="bg-white rounded-xl shadow-md p-5 hover:bg-gray-50 transition">
+              <h3 class="font-semibold text-lg">{{ pdf.title }}</h3>
+              {% if pdf.description %}
+                <p class="text-sm text-gray-600 mb-2">{{ pdf.description }}</p>
+              {% endif %}
+              <iframe src="{{ pdf.pdf.url }}" class="w-full h-56 rounded"></iframe>
+              <div class="mt-4 flex gap-3">
+                <a href="{{ pdf.pdf.url }}" download class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg">⬇ Download</a>
+                <a href="{{ pdf.pdf.url }}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded-lg">🔗 Open</a>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-gray-500">No Current Affairs PDFs available.</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </main>
+</div>
+
+<!-- Footer -->
+<footer class="bg-blue-900 text-white text-center py-6">
+  <p>&copy; 2025 Akshara Learn Together | All Rights Reserved</p>
+</footer>
+
+<script src="{% static 'js/psc.js' %}"></script>
+<script>feather.replace()</script>
+</body>
+</html>

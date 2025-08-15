@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ mock_test.title }} | Test Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="container mx-auto px-6 py-16">
+    <div class="bg-white shadow-lg rounded-xl p-10 text-center max-w-2xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-700 mb-4">🎉 Test Completed!</h2>
+      <h3 class="text-xl font-semibold mb-6">{{ mock_test.title }}</h3>
+
+      <p class="text-2xl font-bold text-gray-900">
+        Your Score: <span class="text-blue-600">{{ score }}</span> / {{ total }}
+      </p>
+
+      <p class="mt-4 text-lg">
+        Percentage:
+        <span class="font-semibold {% if percentage >= 50 %}text-green-600{% else %}text-red-600{% endif %}">
+          {{ percentage }}%
+        </span>
+      </p>
+
+      {% if percentage >= 50 %}
+        <p class="mt-4 text-green-700 font-medium">Excellent work! Keep it up 👍</p>
+      {% else %}
+        <p class="mt-4 text-red-700 font-medium">Don't worry, keep practicing and you'll improve 🚀</p>
+      {% endif %}
+
+      <div class="mt-8">
+        <a href="{% url 'ssc' %}"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition">
+          🔙 Back to SSC Page
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

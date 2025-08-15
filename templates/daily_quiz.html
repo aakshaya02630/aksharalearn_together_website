@@ -1,0 +1,137 @@
+{% load custom_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Quiz - Akshara</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .option-card {
+      transition: 0.3s;
+    }
+    .option-card.selected {
+      background: linear-gradient(to right, #4f46e5, #9333ea);
+      color: white !important;
+      font-weight: bold;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+{% if no_quiz %}
+  <!-- No Quiz Available Message -->
+  <div class="max-w-3xl mx-auto mt-20 bg-red-100 text-red-700 p-10 rounded-xl text-center shadow-lg">
+    <h2 class="text-2xl font-bold">❌ No Quiz Available Today</h2>
+    <p class="mt-4">Please check back tomorrow for a new quiz!</p>
+  </div>
+{% else %}
+
+  <div class="max-w-4xl mx-auto my-10 bg-white shadow-2xl rounded-2xl overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-center text-white">
+      <h1 class="text-3xl font-bold">QUIZ</h1>
+      <p class="mt-2 text-lg">Time Limit: {{ quiz.duration_minutes }} minutes</p>
+      <div id="timer" class="mt-2 font-bold text-yellow-300 text-xl"></div>
+
+      <!-- Progress Bar -->
+      <div class="w-full bg-gray-300 rounded-full h-3 mt-4">
+        <div id="progressBar" class="bg-green-500 h-3 rounded-full" style="width: 0%"></div>
+      </div>
+      <p class="mt-2 text-sm" id="progressText">0 of {{ questions|length }} answered</p>
+
+      <!-- Language Switch -->
+      <div class="mt-4 flex justify-center gap-4">
+        <button type="button" onclick="switchLang('ml')" class="bg-green-500 px-4 py-2 rounded-lg hover:bg-green-600">മലയാളം</button>
+        <button type="button" onclick="switchLang('en')" class="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-600">English</button>
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <form id="quizForm" method="POST" class="p-8">
+      {% csrf_token %}
+      {% for q in questions %}
+      <div class="mb-8 p-6 border border-gray-200 rounded-xl hover:shadow-lg transition">
+        <p class="font-semibold text-lg mb-4">
+          {{ forloop.counter }}.
+          <span class="lang-en hidden">{{ q.en|get_item:"question" }}</span>
+          <span class="lang-ml">{{ q.ml|get_item:"question" }}</span>
+        </p>
+        <div class="grid grid-cols-1 gap-4">
+          <div class="option-card p-4 border rounded-lg cursor-pointer hover:bg-gray-100" onclick="selectOption(this, '{{ q.id }}', 'A')">
+            <span class="lang-en hidden">{{ q.en|get_item:"A" }}</span>
+            <span class="lang-ml">{{ q.ml|get_item:"A" }}</span>
+          </div>
+          <div class="option-card p-4 border rounded-lg cursor-pointer hover:bg-gray-100" onclick="selectOption(this, '{{ q.id }}', 'B')">
+            <span class="lang-en hidden">{{ q.en|get_item:"B" }}</span>
+            <span class="lang-ml">{{ q.ml|get_item:"B" }}</span>
+          </div>
+          <div class="option-card p-4 border rounded-lg cursor-pointer hover:bg-gray-100" onclick="selectOption(this, '{{ q.id }}', 'C')">
+            <span class="lang-en hidden">{{ q.en|get_item:"C" }}</span>
+            <span class="lang-ml">{{ q.ml|get_item:"C" }}</span>
+          </div>
+          <div class="option-card p-4 border rounded-lg cursor-pointer hover:bg-gray-100" onclick="selectOption(this, '{{ q.id }}', 'D')">
+            <span class="lang-en hidden">{{ q.en|get_item:"D" }}</span>
+            <span class="lang-ml">{{ q.ml|get_item:"D" }}</span>
+          </div>
+        </div>
+        <input type="hidden" name="{{ q.id }}" id="answer-{{ q.id }}">
+      </div>
+      {% endfor %}
+      <button type="submit"
+        class="w-full bg-indigo-600 text-white py-3 rounded-xl text-lg font-bold hover:bg-indigo-700 transition">
+        🚀 Submit Answers
+      </button>
+    </form>
+  </div>
+
+{% endif %}
+
+  <script>
+    {% if not no_quiz %}
+    // Timer
+    let totalTime = {{ quiz.duration_minutes }} * 60;
+    let timerDisplay = document.getElementById("timer");
+    function updateTimer() {
+      let minutes = Math.floor(totalTime / 60);
+      let seconds = totalTime % 60;
+      timerDisplay.textContent = `⏳ ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      if (totalTime <= 0) {
+        document.getElementById("quizForm").submit();
+      }
+      totalTime--;
+    }
+    setInterval(updateTimer, 1000);
+
+    // Language switch
+    function switchLang(lang) {
+      document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('hidden', lang !== 'en'));
+      document.querySelectorAll('.lang-ml').forEach(el => el.classList.toggle('hidden', lang !== 'ml'));
+    }
+
+    // Progress + Select option
+    const totalQuestions = {{ questions|length }};
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+
+    function updateProgress() {
+      let answered = 0;
+      document.querySelectorAll("input[type=hidden]").forEach(h => {
+        if (h.value) answered++;
+      });
+      progressBar.style.width = Math.floor((answered / totalQuestions) * 100) + "%";
+      progressText.textContent = `${answered} of ${totalQuestions} answered`;
+    }
+
+    function selectOption(el, qid, value) {
+      document.getElementById(`answer-${qid}`).value = value;
+      el.parentNode.querySelectorAll('.option-card').forEach(opt => opt.classList.remove('selected'));
+      el.classList.add('selected');
+      updateProgress();
+    }
+    {% endif %}
+  </script>
+</body>
+</html>

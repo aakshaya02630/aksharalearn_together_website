@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ test.title }} | RRB Mock Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Countdown timer (15 minutes = 1800 seconds)
+    let timeLeft = 1800;
+    function startTimer() {
+      const timerEl = document.getElementById('timer');
+      const interval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerEl.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          document.getElementById('quizForm').submit();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+    window.onload = startTimer;
+  </script>
+</head>
+<body class="bg-gradient-to-b from-gray-50 via-blue-50 to-gray-100 text-gray-800">
+
+  <div class="container mx-auto px-6 py-10">
+    <!-- Header with Train Theme -->
+    <div class="flex justify-between items-center mb-8 bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 rounded-lg shadow-lg">
+      <div class="flex items-center space-x-4">
+        <img src="{% static 'images/train.png' %}" alt="Train Icon" class="h-12 w-12">
+        <h2 class="text-2xl font-bold">{{ test.title }}</h2>
+      </div>
+      <div class="bg-red-100 text-red-700 px-4 py-2 rounded font-semibold shadow">
+        ⏰ Time Left: <span id="timer">15:00</span>
+      </div>
+    </div>
+
+    <!-- Quiz Form -->
+    <form id="quizForm" method="POST">
+      {% csrf_token %}
+      <div class="space-y-6">
+        {% for q in questions %}
+        <div class="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+          <p class="font-semibold mb-4 text-lg">
+            🚂 {{ forloop.counter }}. {{ q.question_text }}
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="A" class="mr-2"> {{ q.option_a }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="B" class="mr-2"> {{ q.option_b }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="C" class="mr-2"> {{ q.option_c }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="D" class="mr-2"> {{ q.option_d }}
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-10 text-center">
+        <button type="submit"
+                class="bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950
+                       text-white px-10 py-4 rounded-lg font-bold shadow-lg transition transform hover:scale-105">
+          🚆 Submit RRB Mock Test
+        </button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

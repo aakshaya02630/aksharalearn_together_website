@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ test.title }} | Mock Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Countdown timer (15 minutes = 1800 seconds)
+    let timeLeft = 1800;
+    function startTimer() {
+      const timerEl = document.getElementById('timer');
+      const interval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerEl.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          document.getElementById('quizForm').submit();
+        }
+        timeLeft--;
+      }, 1000);
+    }
+    window.onload = startTimer;
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <div class="container mx-auto px-6 py-10">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-bold">{{ test.title }}</h2>
+      <div class="bg-red-100 text-red-700 px-4 py-2 rounded font-semibold">
+        ⏰ Time Left: <span id="timer">15:00</span>
+      </div>
+    </div>
+
+    <form id="quizForm" method="POST">
+      {% csrf_token %}
+      <div class="space-y-6">
+        {% for q in questions %}
+        <div class="p-5 bg-white rounded-lg shadow">
+          <p class="font-semibold mb-3">
+            {{ forloop.counter }}. {{ q.question_text }}
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="A" class="mr-2"> {{ q.option_a }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="B" class="mr-2"> {{ q.option_b }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="C" class="mr-2"> {{ q.option_c }}
+            </label>
+            <label class="block bg-gray-100 p-3 rounded cursor-pointer hover:bg-blue-100">
+              <input type="radio" name="{{ q.id }}" value="D" class="mr-2"> {{ q.option_d }}
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="mt-8 text-center">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transition">
+          Submit Test
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

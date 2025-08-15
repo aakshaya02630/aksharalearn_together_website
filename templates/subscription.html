@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Subscription - Akshara Learn Together</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="h-10 w-10">
+        <h1 class="text-2xl font-extrabold text-indigo-600">Akshara Learn Together</h1>
+      </div>
+      <ul class="flex space-x-6 font-medium">
+        <li><a href="{% url 'home' %}" class="hover:text-indigo-600">Home</a></li>
+        <li><a href="{% url 'register' %}" class="hover:text-indigo-600">Register</a></li>
+        <li><a href="{% url 'mocktest_list' %}" class="hover:text-indigo-600">Mock Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative bg-indigo-700 text-white text-center py-20">
+    <div class="absolute inset-0 bg-black opacity-30"></div>
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Affordable Learning for Everyone</h1>
+      <p class="text-lg md:text-xl text-gray-200 mb-6">
+        Join thousands of students preparing for their dream jobs with Akshara Learn Together.
+      </p>
+      <a href="#plans" class="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition">
+        View Plans
+      </a>
+    </div>
+  </section>
+
+  <!-- Subscription Plans -->
+  <section id="plans" class="relative py-16 bg-gradient-to-r from-yellow-50 via-white to-indigo-50">
+    <!-- Decorative Shapes -->
+    <div class="absolute left-0 top-0 h-full w-1/4 bg-gradient-to-b from-yellow-100 to-transparent opacity-60 rounded-r-full"></div>
+    <div class="absolute right-0 top-0 h-full w-1/4 bg-gradient-to-b from-indigo-100 to-transparent opacity-60 rounded-l-full"></div>
+
+    <div class="relative container mx-auto px-6 flex justify-center">
+      <div class="bg-white shadow-lg rounded-2xl p-10 text-center transform hover:-translate-y-3 hover:shadow-2xl transition duration-300 border-t-4 border-green-500 max-w-md">
+        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+        <p class="text-gray-500 mb-4">For ambitious achievers</p>
+        <p class="text-4xl font-extrabold mb-4">₹99<span class="text-base text-gray-600">/month</span></p>
+        <ul class="text-gray-700 space-y-2 mb-6 text-left">
+          <li>✔ All Standard Features</li>
+          <li>✔ Unlimited Mock Tests</li>
+          <li>✔ Exclusive Study Materials</li>
+          <li>✔ Previous Year Question papers</li>
+          <li>✔ Personal Progress Tracking</li>
+        </ul>
+
+        <!-- Razorpay Button -->
+        {% if order_id %}
+          <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+          <button id="rzp-button" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
+            Pay ₹99 & Join Premium
+          </button>
+
+          <script>
+            var options = {
+              "key": "{{ razorpay_key }}",
+              "amount": "{{ amount }}",
+              "currency": "{{ currency }}",
+              "name": "Akshara Learn Together",
+              "description": "Premium Subscription",
+              "order_id": "{{ order_id }}",
+              "handler": function (response) {
+                window.location.href = "{% url 'payment_success' %}";
+              },
+              "theme": {
+                "color": "#4F46E5"
+              }
+            };
+            var rzp1 = new Razorpay(options);
+            document.getElementById('rzp-button').onclick = function(e){
+              rzp1.open();
+              e.preventDefault();
+            }
+          </script>
+        {% else %}
+          <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
+              Join Premium
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section class="bg-gray-100 py-16">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">About Us</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+        At Akshara Learn Together, we believe every student deserves quality education.
+        Our platform provides affordable courses, daily quizzes, and expert mentorship
+        to help students succeed in competitive exams.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold mb-3 text-indigo-600">Expert Teachers</h3>
+          <p class="text-gray-600">Learn from experienced educators who guide you every step.</p>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold mb-3 text-blue-600">Interactive Learning</h3>
+          <p class="text-gray-600">Quizzes, mock tests, and discussions to keep you engaged.</p>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold mb-3 text-blue-600">Affordable Plans</h3>
+          <p class="text-gray-600">Quality education at prices that fit every student’s budget.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-indigo-700 text-white py-8 mt-10">
+    <div class="container mx-auto px-6 text-center">
+      <p class="mb-3">© 2025 Akshara Learn Together. All rights reserved.</p>
+      <p class="text-sm text-indigo-200">Contact us: support@aksharalearn.com | +91 98765 43210</p>
+    </div>
+  </footer>
+</body>
+</html>

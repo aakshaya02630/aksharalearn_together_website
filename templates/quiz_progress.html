@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Progress - Akshara</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 min-h-screen font-sans">
+
+  <div class="max-w-5xl mx-auto py-10">
+    <h1 class="text-4xl font-bold text-center text-indigo-700 mb-10">
+      📊 Your Quiz Progress
+    </h1>
+
+    {% if submissions %}
+      <div class="grid md:grid-cols-2 gap-6">
+        {% for sub in submissions %}
+        <div class="bg-white shadow-xl rounded-2xl p-6 hover:scale-105 transition transform duration-300">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">
+              {{ sub.quiz.title }}
+            </h2>
+            <span class="text-sm text-gray-500">
+              {{ sub.quiz.date }}
+            </span>
+          </div>
+
+          <!-- Score -->
+          <div class="mb-4">
+            <p class="text-lg font-medium text-gray-700">
+              Score: <span class="text-green-600 font-bold">{{ sub.score }}</span> / {{ sub.total_questions }}
+            </p>
+            <div class="w-full bg-gray-300 rounded-full h-4 mt-2">
+              <div class="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full progress-bar"
+                   data-score="{{ sub.score }}" data-total="{{ sub.total_questions }}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Skipped -->
+          <p class="text-gray-600 mb-2">
+            ⏭️ Skipped: <span class="font-bold text-red-500">{{ sub.skipped }}</span>
+          </p>
+
+          <!-- Badge -->
+          {% if sub.score == sub.total_questions %}
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+              🎯 Perfect!
+            </span>
+          {% elif sub.score >= sub.total_questions|divisibleby:2 %}
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
+              👍 Good Attempt
+            </span>
+          {% else %}
+            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
+              📈 Keep Practicing
+            </span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bg-white shadow-lg rounded-xl p-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">No Attempts Yet 😕</h2>
+        <p class="text-gray-600">Start your first daily quiz to track your progress!</p>
+        <a href="{% url 'daily_quiz_view' %}"
+           class="mt-6 inline-block bg-indigo-600 text-white px-6 py-3 rounded-xl shadow hover:bg-indigo-700">
+          🚀 Take Today’s Quiz
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    // Fill progress bars dynamically
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+      let score = parseInt(bar.dataset.score);
+      let total = parseInt(bar.dataset.total);
+      let percent = total > 0 ? Math.round((score / total) * 100) : 0;
+      bar.style.width = percent + "%";
+    });
+  </script>
+</body>
+</html>

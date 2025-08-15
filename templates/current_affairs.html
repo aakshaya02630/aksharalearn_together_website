@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Current Affairs PDFs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-3xl font-bold mb-6 text-center">📚 Current Affairs PDFs</h1>
+
+    {% for pdf in current_affairs %}
+    <div class="mb-12 border-b pb-6">
+      <!-- Title -->
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ pdf.title }}</h2>
+
+      <!-- Embedded PDF Viewer -->
+      <div class="rounded overflow-hidden border">
+        <iframe src="{{ pdf.pdf.url }}" width="100%" height="500px" class="rounded"></iframe>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-4 flex gap-4">
+        <!-- Download Button -->
+        <a href="{{ pdf.pdf.url }}" download class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded transition">
+          ⬇️ Download PDF
+        </a>
+        <!-- Open in New Tab Button -->
+        <a href="{{ pdf.pdf.url }}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded transition">
+          🔗 Open in New Tab
+        </a>
+      </div>
+    </div>
+    {% empty %}
+      <p class="text-gray-500 text-center">We will update soon</p>
+    {% endfor %}
+  </div>
+</body>
+</html>
