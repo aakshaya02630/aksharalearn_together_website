@@ -1,24 +1,42 @@
-# Python
+# Python bytecode
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
+*$py.class
 
 # Virtual environment
-venv/
+.venv/
 env/
+venv/
 ENV/
 
-# Django
-*.sqlite3
+# Django stuff
 *.log
-/staticfiles/
+*.pot
+*.pyc
+db.sqlite3
 /media/
+staticfiles/
 
-# IDEs
+# IDEs and editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Pipenv / Poetry
+Pipfile.lock
+poetry.lock
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.pytest_cache/
