@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth import login
+
+
 
 
 # Django forms & email
@@ -15,7 +18,9 @@ from .forms import RequestOTPForm, VerifyOTPForm
 
 # Python standard library
 from datetime import timedelta
+
 import random
+
 
 # Razorpay
 import razorpay
@@ -66,6 +71,7 @@ def home(request):
 
 
 
+
 def register_views(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -89,11 +95,14 @@ def register_views(request):
             )
             UserProfile.objects.create(user=user, phone=phone)
             login(request, user)  # Auto login
-            return redirect('home')
+
+            # Add success message
+            messages.success(request, "Registered successfully! Welcome, " + name)
+            return redirect('home')  # You can redirect wherever you want
         except Exception as e:
             print("❌ Error:", e)
-            return render(request, 'register.html', {'error': "Something went wrong. Try again."})
 
+        return render(request, 'register.html', {'error': "Something went wrong. Try again."})
     return render(request, 'register.html')
 
 
