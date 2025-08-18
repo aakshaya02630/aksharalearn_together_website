@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import pymysql
+pymysql.install_as_MySQLdb()
 from pathlib import Path
 import os
 
@@ -75,11 +76,13 @@ WSGI_APPLICATION = 'akshara.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'akshara1',
-        'HOST'  : 'localhost',
-        'USER': 'root',
-        'PASSWORD': '702578'
-    }
+        'NAME': 'uaumwscynd',
+        'HOST'  :'phpstack-1507955-5784006.cloudwaysapps.com',
+        'USER': 'uaumwscynd',
+        'PASSWORD': 'UW3TaRkYrV',
+        'PORT':'3306',
+}
+
 }
 
 
