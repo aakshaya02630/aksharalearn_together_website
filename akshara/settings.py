@@ -19,12 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'your-secret-key-goes-here'  # 🔐 Replace this in production
+SECRET_KEY = 'b3$%6x@t!8wz2p^9#f1v@q&y5z7u^j0k@3s1m!d8l+2h^4c'  # 🔐 Replace this in production
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [aksharalearnings.com', '128.199.16.222]
 
 
 # Application definition
